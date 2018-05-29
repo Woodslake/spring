@@ -1,4 +1,4 @@
-package com.woods.spring.web;
+package com.woods.spring.controller;
 
 import com.woods.spring.result.ErrorInfo;
 import com.woods.spring.result.GlobalErrorInfoException;
