@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class ErrorJsonController {
 
     @RequestMapping("/exception")
-    public String exception() throws GlobalErrorInfoException {
+    public String exception() throws Exception {
         throw new GlobalErrorInfoException(new ErrorInfo("-1", "出错啦！"));
     }
 }
