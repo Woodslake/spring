@@ -1,4 +1,4 @@
-package com.woods.spring.controller;
+package com.woods.spring.web;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

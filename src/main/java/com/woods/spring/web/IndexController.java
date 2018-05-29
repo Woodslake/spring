@@ -1,4 +1,4 @@
-package com.woods.spring.controller;
+package com.woods.spring.web;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
