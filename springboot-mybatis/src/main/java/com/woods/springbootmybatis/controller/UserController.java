@@ -18,4 +18,10 @@ public class UserController {
     public List<User> getUsers(){
         return userMapper.queryUsers();
     }
+
+    @RequestMapping("/getUser")
+    public User getUser(int id){
+        return userMapper.selectUserForId(id);
+    }
+
 }
