@@ -5,6 +5,8 @@ import org.apache.ibatis.annotations.*;
 import org.apache.ibatis.type.JdbcType;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 @Mapper
 public interface UserMapper {
@@ -44,4 +46,12 @@ public interface UserMapper {
         "where id = #{id,jdbcType=INTEGER}"
     })
     int updateByPrimaryKey(User record);
+
+    @Select("SELECT * FROM user")
+    @Results({
+            @Result(property = "id",  column = "id"),
+            @Result(property = "name", column = "name"),
+    })
+    List<User> selectUsers();
+
 }

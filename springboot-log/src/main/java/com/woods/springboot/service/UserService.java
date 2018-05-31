@@ -5,11 +5,12 @@ import com.woods.springboot.domain.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
 
-import java.util.concurrent.TimeUnit;
+import java.util.List;
 
 @Service
 public class UserService {
@@ -32,9 +33,22 @@ public class UserService {
             return user;
         }
         User user = userMapper.selectByPrimaryKey(id);
-        operations.set(key, user, 10, TimeUnit.SECONDS);
+        operations.set(key, user);
         LOGGER.info("findUserById : user插入缓存 >> " + user.toString());
         return userMapper.selectByPrimaryKey(id);
+    }
+
+    public User insert(Integer id, String name){
+        User user = new User();
+        user.setId(id);
+        user.setName(name);
+        userMapper.insert(user);
+        return user;
+    }
+
+    @Cacheable(key = "users")
+    public List<User> getUsers(){
+        return userMapper.selectUsers();
     }
 
 }
