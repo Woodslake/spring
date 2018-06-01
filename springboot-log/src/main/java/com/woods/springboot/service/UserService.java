@@ -5,9 +5,9 @@ import com.woods.springboot.domain.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,14 +20,12 @@ public class UserService {
     @Autowired
     private UserMapper userMapper;
 
-    @Autowired
-    private RedisTemplate redisTemplate;
-
-    @Cacheable("user_${id}")
+    @Cacheable(key = "#id", value = "user")
     public User findUserById(Integer id){
         return userMapper.selectByPrimaryKey(id);
     }
 
+    @CacheEvict(key = "'getUsers'", value = "user")
     public User insert(Integer id, String name){
         User user = new User();
         user.setId(id);
@@ -36,7 +34,7 @@ public class UserService {
         return user;
     }
 
-    @Cacheable("users")
+    @Cacheable(key = "'getUsers'", value = "user")
     public List<User> getUsers(){
         return userMapper.selectUsers();
     }
