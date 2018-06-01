@@ -1,52 +1,36 @@
 package com.woods.springboot.config;
 
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.autoconfigure.data.redis.RedisProperties;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.cache.CacheManager;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.CachingConfigurerSupport;
-import org.springframework.cache.interceptor.CacheErrorHandler;
-import org.springframework.cache.interceptor.CacheResolver;
-import org.springframework.cache.interceptor.KeyGenerator;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import java.lang.reflect.Method;
+import org.springframework.data.redis.cache.RedisCacheManager;
+import org.springframework.data.redis.connection.RedisConnectionFactory;
+import org.springframework.data.redis.core.RedisOperations;
+import org.springframework.data.redis.core.RedisTemplate;
 
 @Configuration
-@Cacheable
+@EnableCaching
+@ConditionalOnClass(RedisOperations.class)
+@EnableConfigurationProperties(RedisProperties.class)
 public class RedisConfig extends CachingConfigurerSupport {
 
     @Bean
-    @Override
-    public CacheManager cacheManager() {
-        return super.cacheManager();
+    public CacheManager cacheManager(RedisConnectionFactory redisConnectionFactory) {
+        return RedisCacheManager.RedisCacheManagerBuilder.fromConnectionFactory(redisConnectionFactory).build();
     }
 
     @Bean
-    @Override
-    public KeyGenerator keyGenerator() {
-        return new KeyGenerator() {
-            @Override
-            public Object generate(Object target, Method method, Object... params) {
-                StringBuilder sb = new StringBuilder();
-                sb.append(target.getClass().getName());
-                sb.append(method.getName());
-                for (Object obj : params) {
-                    sb.append(obj.toString());
-                }
-                return sb.toString();
-            }
-        };
+    public RedisTemplate redisTemplate(RedisConnectionFactory factory){
+        //创建一个模板类
+        RedisTemplate<String, Object> template = new RedisTemplate<String, Object>();
+        //将刚才的redis连接工厂设置到模板类中
+        template.setConnectionFactory(factory);
+        return template;
     }
 
-    @Bean
-    @Override
-    public CacheResolver cacheResolver() {
-        return super.cacheResolver();
-    }
-
-    @Bean
-    @Override
-    public CacheErrorHandler errorHandler() {
-        return super.errorHandler();
-    }
 }

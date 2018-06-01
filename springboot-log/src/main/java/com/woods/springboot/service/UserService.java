@@ -23,18 +23,8 @@ public class UserService {
     @Autowired
     private RedisTemplate redisTemplate;
 
+    @Cacheable("user_${id}")
     public User findUserById(Integer id){
-        String key = "user_" + id;
-        ValueOperations<String, User> operations = redisTemplate.opsForValue();
-        boolean hasKey = redisTemplate.hasKey(key);
-        if(hasKey){
-            User user = operations.get(key);
-            LOGGER.info("findUserById : 从缓存中获取了>>" + user.toString());
-            return user;
-        }
-        User user = userMapper.selectByPrimaryKey(id);
-        operations.set(key, user);
-        LOGGER.info("findUserById : user插入缓存 >> " + user.toString());
         return userMapper.selectByPrimaryKey(id);
     }
 
@@ -46,7 +36,7 @@ public class UserService {
         return user;
     }
 
-    @Cacheable(key = "users")
+    @Cacheable("users")
     public List<User> getUsers(){
         return userMapper.selectUsers();
     }
