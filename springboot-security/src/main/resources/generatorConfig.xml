@@ -51,6 +51,16 @@
                enableDeleteByExample="false" enableSelectByExample="false"
                enableUpdateByExample="false">
         </table>
+        <table schema="spring" tableName="role"
+               domainObjectName="Role" enableCountByExample="false"
+               enableDeleteByExample="false" enableSelectByExample="false"
+               enableUpdateByExample="false">
+        </table>
+        <table schema="spring" tableName="user_role"
+               domainObjectName="UserRole" enableCountByExample="false"
+               enableDeleteByExample="false" enableSelectByExample="false"
+               enableUpdateByExample="false">
+        </table>
 
     </context>
 </generatorConfiguration>

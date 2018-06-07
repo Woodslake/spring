@@ -58,18 +58,4 @@ public interface UserMapper {
             @Result(property = "password", column = "password"),
     })
     List<User> selectUsers();
-
-    @Select({
-            "select",
-            "id, name, password",
-            "from user",
-            "where name = #{name,jdbcType=VARCHAR}"
-    })
-    @Results({
-            @Result(column="id", property="id", jdbcType=JdbcType.INTEGER, id=true),
-            @Result(column="name", property="name", jdbcType=JdbcType.VARCHAR),
-            @Result(column="password", property="password", jdbcType=JdbcType.VARCHAR)
-    })
-    User selectByName(String name);
-
 }
